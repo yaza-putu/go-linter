@@ -43,8 +43,8 @@
       "suffix": "er"
     },
     "struct_naming": {
-      "pattern": "^[A-Z][a-zA-Z0-9]*$",
-      "description": "Struct names should be PascalCase"
+      "pattern": "^[A-Za-z][a-zA-Z0-9]*$",
+      "description": "Struct name should be PascalCase (exported) or camelCase (unexported)"
     },
     "variable_naming": {
       "pattern": "^[a-z][a-zA-Z0-9]*$",

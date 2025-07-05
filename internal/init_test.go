@@ -84,8 +84,8 @@ func TestDefaultPatternsAreValidAndMatchCorrectly(t *testing.T) {
 		},
 		{
 			ruleName:     "struct_naming",
-			validNames:   []string{"User", "Order123"},
-			invalidNames: []string{"user", "_User"},
+			validNames:   []string{"User", "Order123", "privateStruct"},
+			invalidNames: []string{"_User", "private_struct"},
 		},
 		{
 			ruleName:     "interface_naming",
