@@ -1,4 +1,4 @@
-module github.com/yaza-putu/go-linter
+module github.com/yaza-putu/golinter
 
 go 1.22.4
 
