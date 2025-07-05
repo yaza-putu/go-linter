@@ -67,13 +67,13 @@ func Default() *Config {
 				Exceptions:  []string{"main.go", "go.mod", "go.sum"},
 			},
 			"handler_naming": {
-				Pattern:     "^[A-Z][a-zA-Z0-9]*Handler$",
-				Description: "Handlers should be PascalCase and end with 'Handler'",
+				Pattern:     "^[A-Za-z][a-zA-Z0-9]*Handler$",
+				Description: "Handlers should be PascalCase (exported) or camelCase (unexported) and end with 'Handler'",
 				Suffix:      "Handler",
 			},
 			"variable_naming": {
-				Pattern:     "^[a-z][a-zA-Z0-9]*$",
-				Description: "Variables should use camelCase",
+				Pattern:     "^[A-Za-z][a-zA-Z0-9]*$",
+				Description: "Variables should be PascalCase (exported) or camelCase (unexported)",
 				Exceptions:  []string{"i", "j", "k", "id", "db", "ok", "err", "_"},
 			},
 			"function_naming": {
@@ -91,8 +91,8 @@ func Default() *Config {
 				Description: "Struct name should be PascalCase (exported) or camelCase (unexported)",
 			},
 			"interface_naming": {
-				Pattern:     "^[A-Z][a-zA-Z0-9]*er$",
-				Description: "Interfaces should be PascalCase and typically end with 'er'",
+				Pattern:     "^[A-Z][a-zA-Z0-9]*$",
+				Description: "Interfaces should be PascalCase",
 				Suffix:      "er",
 			},
 		},

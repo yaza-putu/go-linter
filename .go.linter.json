@@ -47,8 +47,8 @@
       "description": "Struct name should be PascalCase (exported) or camelCase (unexported)"
     },
     "variable_naming": {
-      "pattern": "^[a-z][a-zA-Z0-9]*$",
-      "description": "Variables should use camelCase",
+      "pattern": "^[A-Za-z][a-zA-Z0-9]*$",
+      "description": "Variable name should be PascalCase (exported) or camelCase (unexported)",
       "exceptions": [
         "i",
         "j",

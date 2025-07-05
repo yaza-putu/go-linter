@@ -30,10 +30,10 @@ func TestDefaultConfig(t *testing.T) {
 
 	// Sample test for a specific rule (e.g. variable_naming)
 	varRule := cfg.Rules["variable_naming"]
-	assert.Equal(t, "^[a-z][a-zA-Z0-9]*$", varRule.Pattern)
+	assert.Equal(t, "^[A-Za-z][a-zA-Z0-9]*$", varRule.Pattern)
 	assert.Contains(t, varRule.Exceptions, "id")
 	assert.Contains(t, varRule.Exceptions, "_")
-	assert.Equal(t, "Variables should use camelCase", varRule.Description)
+	assert.Equal(t, "Variables should be PascalCase (exported) or camelCase (unexported)", varRule.Description)
 
 	// Check interface naming suffix
 	ifaceRule := cfg.Rules["interface_naming"]
@@ -64,13 +64,13 @@ func TestDefaultPatternsAreValidAndMatchCorrectly(t *testing.T) {
 		},
 		{
 			ruleName:     "handler_naming",
-			validNames:   []string{"UserHandler", "OrderHandler"},
+			validNames:   []string{"UserHandler", "OrderHandler", "orderHandler"},
 			invalidNames: []string{"userhandler", "Userhandler", "HandlerUser"},
 		},
 		{
 			ruleName:     "variable_naming",
-			validNames:   []string{"userName", "id123", "ok"},
-			invalidNames: []string{"UserName", "123id", "_name"},
+			validNames:   []string{"userName", "id123", "ok", "UserName"},
+			invalidNames: []string{"123id", "_name", "variable_name"},
 		},
 		{
 			ruleName:     "function_naming",
