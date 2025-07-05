@@ -48,7 +48,7 @@ if it's not accessible, try moving it to the global bin
 ### 2. Generate Default Config + Hook
 
 ```sh
-$ go run main.go init
+$ golinter init
 ```
 
 This will:
@@ -61,7 +61,10 @@ This will:
 ```sh
 git commit -m "message"
 ```
-
+or
+```sh
+golinter lint .
+```
 ---
 
 ## 📂 File Overview
