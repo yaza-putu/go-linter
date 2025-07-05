@@ -51,7 +51,7 @@ This will:
 ### 2. Lint Your Project
 
 ```sh
-$ go run cmd/main.go lint .
+git commit -m "message"
 ```
 
 ---
