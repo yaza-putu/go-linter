@@ -15,8 +15,8 @@ NC='\033[0m' # No Color
 
 # Check if go-linter binary exists
 if ! command -v ./go-linter &> /dev/null; then
-    echo -e "${YELLOW}⚠️  go-linter not found. Building...${NC}"
-    go build -o go-linter .
+    echo -e "${YELLOW}⚠️  go-linter not found...${NC}"
+    echo "please run command : go install github.com/yaza-putu/go-linter@latest"
 fi
 
 # Check if config file exists

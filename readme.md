@@ -40,6 +40,11 @@ A simple configurable Go code linter that validates code naming conventions for 
 go install github.com/yaza-putu/go-linter@latest
 ```
 
+if it's not accessible, try moving it to the global bin
+```bash
+ mv ~/go/bin/go-linter /usr/local/bin
+```
+
 ### 2. Generate Default Config + Hook
 
 ```sh

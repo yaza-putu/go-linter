@@ -49,13 +49,13 @@ func (l *Linter) LintProject(root string) error {
 			if l.isExcludedFolder(info.Name()) {
 				return filepath.SkipDir
 			}
-			return l.checkFolder(path, info.Name())
+			return l.checkRule("folder_naming", path, info.Name(), 1, 1)
 		}
 		if l.isExcludedFile(info.Name()) {
 			return nil
 		}
 		if strings.HasSuffix(info.Name(), ".go") {
-			if err := l.checkFile(path, info.Name()); err != nil {
+			if err := l.checkRule("file_naming", path, info.Name(), 1, 1); err != nil {
 				return err
 			}
 			return l.parseAST(path)
@@ -82,42 +82,22 @@ func (l *Linter) isExcludedFile(name string) bool {
 	return false
 }
 
-func (l *Linter) checkFolder(path, name string) error {
-	for _, exc := range l.config.FolderNaming.Exceptions {
-		if name == exc {
-			return nil
-		}
+func (l *Linter) checkRule(ruleName, path, name string, line, col int) error {
+	rule, ok := l.config.Rules[ruleName]
+	if !ok {
+		return nil
 	}
-	matched, _ := regexp.MatchString(l.config.FolderNaming.Pattern, name)
-	if !matched {
+	if isException(name, rule.Exceptions) {
+		return nil
+	}
+	if !matchRegex(rule.Pattern, name) {
 		l.addError(LintError{
 			File:       path,
-			Line:       1,
-			Column:     1,
-			Type:       "folder_naming",
-			Message:    fmt.Sprintf("Folder '%s' invalid: %s", name, l.config.FolderNaming.Description),
-			Suggestion: "Use lowercase_with_underscores",
-			Severity:   "warning",
-		})
-	}
-	return nil
-}
-
-func (l *Linter) checkFile(path, name string) error {
-	for _, exc := range l.config.FileNaming.Exceptions {
-		if name == exc {
-			return nil
-		}
-	}
-	matched, _ := regexp.MatchString(l.config.FileNaming.Pattern, name)
-	if !matched {
-		l.addError(LintError{
-			File:       path,
-			Line:       1,
-			Column:     1,
-			Type:       "file_naming",
-			Message:    fmt.Sprintf("File '%s' invalid: %s", name, l.config.FileNaming.Description),
-			Suggestion: "Use lowercase_with_underscores.go",
+			Line:       line,
+			Column:     col,
+			Type:       ruleName,
+			Message:    fmt.Sprintf("'%s' invalid: %s", name, rule.Description),
+			Suggestion: defaultSuggestion(ruleName, rule.Suffix),
 			Severity:   "warning",
 		})
 	}
@@ -135,12 +115,116 @@ func (l *Linter) parseAST(path string) error {
 	}
 
 	ast.Inspect(file, func(n ast.Node) bool {
-		if n == nil {
-			return true
+		switch node := n.(type) {
+		case *ast.GenDecl:
+			for _, spec := range node.Specs {
+				if vs, ok := spec.(*ast.ValueSpec); ok {
+					for _, name := range vs.Names {
+						pos := l.fileSet.Position(name.Pos())
+						ruleName := "variable_naming"
+						if node.Tok == token.CONST {
+							ruleName = "constant_naming"
+						}
+						l.checkDynamicRule(ruleName, name.Name, pos)
+					}
+				}
+			}
+		case *ast.FuncDecl:
+			pos := l.fileSet.Position(node.Name.Pos())
+			name := node.Name.Name
+			if rule, ok := l.config.Rules["handler_naming"]; ok && rule.Suffix != "" && strings.HasSuffix(name, rule.Suffix) {
+				l.checkDynamicRule("handler_naming", name, pos)
+			} else {
+				l.checkDynamicRule("function_naming", name, pos)
+			}
+		case *ast.TypeSpec:
+			pos := l.fileSet.Position(node.Name.Pos())
+			switch node.Type.(type) {
+			case *ast.StructType:
+				l.checkDynamicRule("struct_naming", node.Name.Name, pos)
+			case *ast.InterfaceType:
+				l.checkDynamicRule("interface_naming", node.Name.Name, pos)
+			}
+		case *ast.AssignStmt:
+			assign := node
+			if assign.Tok != token.DEFINE {
+				break
+			}
+			for _, expr := range assign.Lhs {
+				if ident, ok := expr.(*ast.Ident); ok {
+					pos := l.fileSet.Position(ident.Pos())
+					l.checkDynamicRule("variable_naming", ident.Name, pos)
+				}
+			}
 		}
 		return true
 	})
 	return nil
+}
+
+func (l *Linter) checkDynamicRule(ruleName, name string, pos token.Position) {
+	rule, ok := l.config.Rules[ruleName]
+	if !ok {
+		return
+	}
+	if isException(name, rule.Exceptions) {
+		return
+	}
+	if !matchRegex(rule.Pattern, name) {
+		suggestion := defaultSuggestion(ruleName, rule.Suffix)
+		l.addError(LintError{
+			File:       pos.Filename,
+			Line:       pos.Line,
+			Column:     pos.Column,
+			Type:       ruleName,
+			Message:    fmt.Sprintf("'%s' doesn't match: %s", name, rule.Description),
+			Suggestion: suggestion,
+			Severity:   "warning",
+		})
+	}
+}
+
+func isException(name string, exceptions []string) bool {
+	for _, exc := range exceptions {
+		if name == exc {
+			return true
+		}
+	}
+	return false
+}
+
+func matchRegex(pattern, name string) bool {
+	re := regexp.MustCompile(pattern)
+	return re.MatchString(name)
+}
+
+func defaultSuggestion(ruleName, suffix string) string {
+	switch ruleName {
+	case "folder_naming":
+		return "Use lowercase_with_underscores"
+	case "file_naming":
+		return "Use lowercase_with_underscores.go"
+	case "function_naming":
+		return "Use PascalCase for exported functions"
+	case "variable_naming":
+		return "Use camelCase"
+	case "constant_naming":
+		return "Use UPPERCASE_WITH_UNDERSCORES"
+	case "struct_naming":
+		return "Use PascalCase"
+	case "interface_naming":
+		if suffix != "" {
+			return "End with '" + suffix + "'"
+		}
+		return "Use PascalCase"
+	case "handler_naming":
+		if suffix != "" {
+			return "End with '" + suffix + "'"
+		}
+		return "Use PascalCase + Handler"
+	default:
+		return "Follow naming convention"
+	}
 }
 
 func (l *Linter) addError(e LintError) {
