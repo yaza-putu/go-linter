@@ -2,6 +2,8 @@
 
 A simple configurable Go code linter that validates code naming conventions for folders, files, functions, variables, constants, structs, and interfaces. It also supports pre-commit hook integration to prevent bad naming conventions from being committed.
 
+In principle, code validation should occur during the commit phase rather than at push time. This approach ensures that any issues can be addressed immediately, eliminating the need for a soft reset or force push.
+
 ---
 
 ## 📁 Folder Structure
