@@ -13,7 +13,7 @@ GREEN='\033[0;32m'
 YELLOW='\033[1;33m'
 NC='\033[0m' # No Color
 
-# Check if go-linter binary exists
+# Check if golinter binary exists
 if ! command -v golinter &> /dev/null; then
     echo -e "${YELLOW}⚠️  golinter not found...${NC}"
     echo "please run command : go install github.com/yaza-putu/golinter@latest"
@@ -22,7 +22,7 @@ fi
 # Check if config file exists
 if [ ! -f ".go.linter.json" ]; then
     echo -e "${YELLOW}⚠️  .go.linter.json not found. Generating default config...${NC}"
-    ./go-linter init
+    golinter init
 fi
 
 # Get staged Go files
@@ -41,7 +41,7 @@ echo
 
 # Run the linter on the project
 echo -e "${YELLOW}🔍 Running linter...${NC}"
-if ./go-linter lint .; then
+if golinter lint .; then
     echo -e "${GREEN}✅ All code style checks passed!${NC}"
     exit 0
 else
