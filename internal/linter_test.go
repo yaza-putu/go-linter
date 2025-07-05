@@ -43,6 +43,8 @@ func TestDefaultConfig(t *testing.T) {
 	// Check exclusions
 	assert.Contains(t, cfg.Exclusions.Folders, "vendor")
 	assert.Contains(t, cfg.Exclusions.Files, "*.pb.go")
+	assert.Contains(t, cfg.Exclusions.Folders, ".vscode")
+	assert.Contains(t, cfg.Exclusions.Folders, ".idea")
 }
 
 func TestDefaultPatternsAreValidAndMatchCorrectly(t *testing.T) {

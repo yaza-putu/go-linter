@@ -101,7 +101,7 @@ func Default() *Config {
 			Files   []string `json:"files"`
 		}{
 			Folders: []string{
-				"vendor", ".git", "node_modules", "dist", "build", "third_party", "docs",
+				"vendor", ".git", "node_modules", "dist", "build", "third_party", "docs", ".vscode", ".idea",
 			},
 			Files: []string{
 				"*.pb.go", "*.gen.go", "*_test.go", "*_mock.go", "*_fixture.go",
