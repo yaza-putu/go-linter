@@ -48,7 +48,7 @@ if it's not accessible, try moving it to the global bin
 ```
 
 ### 2. Generate Default Config + Hook
-go to your project folder and then run command bellow
+In your project folder, run the command below:
 
 ```sh
 $ golinter init
