@@ -87,8 +87,8 @@ func Default() *Config {
 				Description: "Constants should be UPPER_CASE with underscores",
 			},
 			"struct_naming": {
-				Pattern:     "^[A-Z][a-zA-Z0-9]*$",
-				Description: "Struct names should be PascalCase",
+				Pattern:     "^[A-Za-z][a-zA-Z0-9]*$",
+				Description: "Struct name should be PascalCase (exported) or camelCase (unexported)",
 			},
 			"interface_naming": {
 				Pattern:     "^[A-Z][a-zA-Z0-9]*er$",
