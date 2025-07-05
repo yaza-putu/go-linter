@@ -1,0 +1,44 @@
+{
+  "folder_naming": {
+    "pattern": "^[a-z][a-z0-9_]*$",
+    "description": "Folder names should be lowercase with underscores",
+    "exceptions": [".git", ".github", "node_modules", "vendor"]
+  },
+  "file_naming": {
+    "pattern": "^[a-z][a-z0-9_]*\\.go$",
+    "description": "Go files should be lowercase with underscores",
+    "exceptions": ["main.go", "go.mod", "go.sum"]
+  },
+  "handler_naming": {
+    "pattern": "^[A-Z][a-zA-Z0-9]*Handler$",
+    "description": "Handler functions should be PascalCase and end with 'Handler'",
+    "suffix": "Handler"
+  },
+  "variable_naming": {
+    "pattern": "^[a-z][a-zA-Z0-9]*$",
+    "description": "Variables should be camelCase",
+    "exceptions": ["i", "j", "k", "id", "db", "ok", "err", "ctx", "req", "res", "url", "api"]
+  },
+  "function_naming": {
+    "pattern": "^[A-Z][a-zA-Z0-9]*$",
+    "description": "Public functions should be PascalCase",
+    "exceptions": ["main", "init"]
+  },
+  "constant_naming": {
+    "pattern": "^[A-Z][A-Z0-9_]*$",
+    "description": "Constants should be UPPERCASE with underscores"
+  },
+  "struct_naming": {
+    "pattern": "^[A-Z][a-zA-Z0-9]*$",
+    "description": "Structs should be PascalCase"
+  },
+  "interface_naming": {
+    "pattern": "^[A-Z][a-zA-Z0-9]*er$",
+    "description": "Interfaces should be PascalCase and end with 'er'",
+    "suffix": "er"
+  },
+  "exclusions": {
+    "folders": ["vendor", ".git", "node_modules", "dist", "build", ".vscode", ".idea"],
+    "files": ["*.pb.go", "*.gen.go", "*_test.go", "*.mock.go"]
+  }
+}
