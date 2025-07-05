@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/yaza-putu/golang-linter/internal"
+	"github.com/yaza-putu/go-linter/internal"
 )
 
 func main() {
