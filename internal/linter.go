@@ -92,6 +92,8 @@ func (l *Linter) checkFolder(path, name string) error {
 	if !matched {
 		l.addError(LintError{
 			File:       path,
+			Line:       1,
+			Column:     1,
 			Type:       "folder_naming",
 			Message:    fmt.Sprintf("Folder '%s' invalid: %s", name, l.config.FolderNaming.Description),
 			Suggestion: "Use lowercase_with_underscores",
@@ -111,6 +113,8 @@ func (l *Linter) checkFile(path, name string) error {
 	if !matched {
 		l.addError(LintError{
 			File:       path,
+			Line:       1,
+			Column:     1,
 			Type:       "file_naming",
 			Message:    fmt.Sprintf("File '%s' invalid: %s", name, l.config.FileNaming.Description),
 			Suggestion: "Use lowercase_with_underscores.go",
@@ -129,8 +133,11 @@ func (l *Linter) parseAST(path string) error {
 	if err != nil {
 		return err
 	}
+
 	ast.Inspect(file, func(n ast.Node) bool {
-		// Delegasikan ke checks.go nanti
+		if n == nil {
+			return true
+		}
 		return true
 	})
 	return nil
