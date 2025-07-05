@@ -37,7 +37,7 @@ A simple configurable Go code linter that validates code naming conventions for 
 ## 🚀 Usage
 ### 1. Install
 ```bash
-go install github.com/yaza-putu/golang-linter@latest
+go install github.com/yaza-putu/go-linter@latest
 ```
 
 ### 2. Generate Default Config + Hook
@@ -98,7 +98,7 @@ git commit -m "message"
 ### `pre-commit-hook.sh`
 
 - Executed automatically by Git before commit
-- Runs `go run cmd/main.go lint .`
+- Runs `go run main.go lint .`
 - Blocks commit if lint errors exist
 
 ---
