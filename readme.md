@@ -8,8 +8,7 @@ A simple configurable Go code linter that validates code naming conventions for 
 
 ```
 /go-linter-tool
-├── cmd/
-│   └── main.go                # CLI entry point (init/lint)
+├── main.go # CLI entry point (init/lint)
 ├── internal/
 │   ├── check.go               # AST naming rule checks (functions, vars, consts, types)
 │   ├── config.go              # Default configuration and JSON loading
@@ -36,11 +35,15 @@ A simple configurable Go code linter that validates code naming conventions for 
 ---
 
 ## 🚀 Usage
+### 1. Install
+```bash
+go install github.com/yaza-putu/golang-linter@latest
+```
 
-### 1. Generate Default Config + Hook
+### 2. Generate Default Config + Hook
 
 ```sh
-$ go run cmd/main.go init
+$ go run main.go init
 ```
 
 This will:
@@ -48,7 +51,7 @@ This will:
 - Create `.go.linter.json` if missing
 - Copy `pre-commit-hook.sh` into `.git/hooks/pre-commit`
 
-### 2. Lint Your Project
+### 3. Lint Your Project
 
 ```sh
 git commit -m "message"
@@ -58,7 +61,7 @@ git commit -m "message"
 
 ## 📂 File Overview
 
-### `cmd/main.go`
+### `main.go`
 
 - Main CLI entry point
 - Handles commands:
